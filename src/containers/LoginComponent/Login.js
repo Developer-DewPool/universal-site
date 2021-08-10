@@ -12,11 +12,16 @@ function Login(props) {
   const handleLogin = () => {
     setError(null);
     setLoading(true);
-    axios.post('http://localhost:4000/users/signin', { username: username.value, password: password.value }).then(response => {
-      setLoading(false);
-      setUserSession(response.data.token, response.data.user);
-      props.history.push('/dashboard');
+    axios.post('http://127.0.0.1:8000/student/login', { username: username.value, hashcode: password.value }).then(response => {
+      console.log(response)
+      if (response.data.status) {
+        setLoading(false);
+        setUserSession(response.data.token, response.data.data);
+        props.history.push('/dashboard');
+      }
+      
     }).catch(error => {
+      console.log(error)
       setLoading(false);
       if (error.response.status === 401) setError(error.response.data.message);
       else setError("Something went wrong. Please try again later.");

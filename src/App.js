@@ -6,20 +6,26 @@ import PublicRoute from './containers/Utils/PublicRoute';
 import Login from './containers/LoginComponent/Login';
 import Dashboard from './containers/DashboardComponent/Dashboard';
 import Home from './containers/HomeComponent/Home';
-import { getToken, removeUserSession, setUserSession } from './containers/Utils/Common';
+import { getUser, getToken, removeUserSession, setUserSession } from './containers/Utils/Common';
 
 
 function App() {
   const [authLoading, setAuthLoading] = useState(true);
 
   useEffect(() => {
+    const user = getUser();
+    if (!user) {
+      return;
+    }
+
     const token = getToken();
     if (!token) {
       return;
     }
 
-    axios.get(`http://localhost:4000/verifyToken?token=${token}`).then(response => {
-      setUserSession(response.data.token, response.data.user);
+    axios.get(`http://127.0.0.1:8000/student/${user.id}`).then(response => {
+      console.log('response: ', response)
+      setUserSession(response.data.token, response.data.data);
       setAuthLoading(false);
     }).catch(error => {
       removeUserSession();
@@ -27,7 +33,7 @@ function App() {
     });
   }, []);
 
-  if (authLoading && getToken()) {
+  if (authLoading && getUser()) {
     return <div className="content">Checking Authentication...</div>
   }
 

@@ -20,6 +20,7 @@ code {
   padding: 10px;
   background: #edf2f4;
   border-bottom: 1px solid #999;
+  text-align: center;
 }
 .header a {
   color: #0072ff;

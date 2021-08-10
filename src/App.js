@@ -8,8 +8,16 @@ import Dashboard from './containers/DashboardComponent/Dashboard';
 import Home from './containers/HomeComponent/Home';
 import { getUser, getToken, removeUserSession, setUserSession } from './containers/Utils/Common';
 
+// import Navbar from 'dynamic-react-navbar';
+// import 'dynamic-react-navbar/dist/index.css';
 
-function App() {
+// const links = [
+//   { caption: 'Home', path: '/', key: '1' },
+//   { caption: 'Login', path: '/login', key: '2' },
+//   { caption: 'Dashboard', path: '/dashboard', key: '3' }
+// ]
+
+const App = () => {
   const [authLoading, setAuthLoading] = useState(true);
 
   useEffect(() => {
@@ -24,7 +32,6 @@ function App() {
     }
 
     axios.get(`http://127.0.0.1:8000/student/${user.id}`).then(response => {
-      console.log('response: ', response)
       setUserSession(response.data.token, response.data.data);
       setAuthLoading(false);
     }).catch(error => {
@@ -42,9 +49,10 @@ function App() {
       <BrowserRouter>
         <div>
           <div className="header">
+            {/* <Navbar links={links} /> */}
             <NavLink exact activeClassName="active" to="/">Home</NavLink>
-            <NavLink activeClassName="active" to="/login">Login</NavLink> {/*<small>(Access without token only)</small>*/}
-            <NavLink activeClassName="active" to="/dashboard">Dashboard</NavLink>{/*<small>(Access with token only)</small>*/}
+            <NavLink activeClassName="active" to="/login">Login</NavLink> 
+            <NavLink activeClassName="active" to="/dashboard">Dashboard</NavLink>
           </div>
           <div className="content">
             <Switch>

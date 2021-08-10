@@ -13,17 +13,22 @@ function Login(props) {
     setError(null);
     setLoading(true);
     axios.post('http://127.0.0.1:8000/student/login', { username: username.value, hashcode: password.value }).then(response => {
-      console.log(response)
-      if (response.data.status) {
+      // console.log(response)
+      if (!response.data.error) {
         setLoading(false);
         setUserSession(response.data.token, response.data.data);
         props.history.push('/dashboard');
+      } else {
+        console.log(response.data.message);
+        setLoading(false);
+        if (response.data.error) setError(response.data.message);
+        else setError("Something went wrong. Please try again later.");
       }
       
     }).catch(error => {
-      console.log(error)
+      console.log(error.data.message);
       setLoading(false);
-      if (error.response.status === 401) setError(error.response.data.message);
+      if (error.error === 401) setError(error.data.message);
       else setError("Something went wrong. Please try again later.");
     });
   }
@@ -39,6 +44,7 @@ function Login(props) {
         Password<br />
         <input type="password" {...password} autoComplete="new-password" />
       </div>
+      <br />
       {error && <><small style={{ color: 'red' }}>{error}</small><br /></>}<br />
       <input type="button" value={loading ? 'Loading...' : 'Login'} onClick={handleLogin} disabled={loading} /><br />
     </div>
